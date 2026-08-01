@@ -1,0 +1,111 @@
+CC      = gcc
+CXX     = g++
+
+DEFINES = -DHAVE_SNPRINTF -DHAVE_VSNPRINTF -DHAVE_ATEXIT \
+          -DHAVE_LIBSDL_IMAGE -DVERSION=\"0.5.1\" -DPACKAGE=\"KoboDeluxe\" \
+          -DIS_OS2_HOST \
+          -DKOBO_DATA_DIR=\".\" \
+          -DKOBO_SCORE_DIR=\".\" \
+          -DKOBO_CONFIG_DIR=\".\" \
+          -DKOBO_CONFIG_FILE=\"kobodl.cfg\" \
+          -DSYSCONF_DIR=\".\"
+
+WARNFLAGS = -Wall \
+            -Wno-unused-variable -Wno-unused-but-set-variable \
+            -Wno-deprecated-declarations \
+            -Wno-dangling-else \
+            -Wno-parentheses \
+            -Wno-stringop-truncation \
+            -Wno-stringop-overflow \
+            -Wno-format-truncation \
+            -Wno-array-bounds \
+            -Wno-sequence-point
+
+CFLAGS   = -Zomf -Zmt -O2 -MMD -MP $(WARNFLAGS) \
+           -Isrc -Isrc/graphics -Isrc/sound -Isrc/eel -Idata/sfx \
+           -IC:/usr/include -IC:/usr/include/SDL2 \
+           $(DEFINES)
+CXXFLAGS = $(CFLAGS) -Wno-literal-suffix
+
+LDFLAGS  = -Zomf -Zmt -Zstack 512
+LIBS     = C:/usr/lib/SDL2_dll.a \
+           C:/usr/lib/SDL2_image_dll.a \
+           C:/usr/lib/SDL2_mixer_dll.a
+
+TARGET   = kobodl.exe
+
+# ---------------------------------------------------------------
+# Top-level sources
+# ---------------------------------------------------------------
+KOBOSRCS = \
+	src/cfgform.cpp src/cfgparse.cpp src/dashboard.cpp src/enemies.cpp src/enemy.cpp \
+	src/filemap.cpp src/form.cpp src/game.cpp src/gamectl.cpp src/gamestate.cpp \
+	src/kobo.cpp src/logger.c src/manage.cpp src/map.cpp src/myship.cpp src/options.cpp \
+	src/pfile.cpp src/prefs.cpp src/radar.cpp src/random.cpp src/scenes.cpp src/score.cpp \
+	src/screen.cpp src/sound.cpp src/states.cpp
+
+KOBOOBJS = $(KOBOSRCS:.cpp=.obj)
+KOBOOBJS := $(KOBOOBJS:.c=.obj)
+
+# ---------------------------------------------------------------
+# graphics sources
+# ---------------------------------------------------------------
+GRFXSRCS = \
+	src/graphics/cs.c src/graphics/sprite.c src/graphics/filters.c src/graphics/glSDL.c \
+	src/graphics/gfxengine.cpp src/graphics/window.cpp src/graphics/sofont.cpp \
+	src/graphics/display.cpp src/graphics/toolkit.cpp src/graphics/vidmodes.c \
+	src/graphics/region.c
+
+GRFXOBJS = $(GRFXSRCS:.cpp=.obj)
+GRFXOBJS := $(GRFXOBJS:.c=.obj)
+
+# ---------------------------------------------------------------
+# sound sources
+# ---------------------------------------------------------------
+SNDSRCS = \
+	src/sound/audio.c src/sound/a_globals.c src/sound/a_struct.c src/sound/audiodev.c \
+	src/sound/a_midi.c src/sound/sfifo.c src/sound/a_pitch.c src/sound/a_midisock.c \
+	src/sound/a_wave.c src/sound/a_patch.c src/sound/a_channel.c src/sound/a_voice.c \
+	src/sound/a_bus.c src/sound/a_commands.c src/sound/a_control.c src/sound/a_midicon.c \
+	src/sound/a_midifile.c src/sound/a_plugin.c src/sound/a_delay.c src/sound/a_limiter.c \
+	src/sound/a_filters.c src/sound/a_wca.c src/sound/a_agw.c src/sound/a_sequencer.c \
+	src/sound/a_events.c
+
+SNDOBJS = $(SNDSRCS:.c=.obj)
+
+# ---------------------------------------------------------------
+# eel sources
+# ---------------------------------------------------------------
+EELSRCS = \
+	src/eel/eel.c src/eel/e_script.c src/eel/e_symtab.c src/eel/e_path.c src/eel/e_util.c \
+	src/eel/e_lexer.c src/eel/e_register.c src/eel/e_builtin.c src/eel/e_getargs.c
+
+EELOBJS = $(EELSRCS:.c=.obj)
+
+ALLOBJS = $(KOBOOBJS) $(GRFXOBJS) $(SNDOBJS) $(EELOBJS)
+
+# ---------------------------------------------------------------
+# Build rules
+# ---------------------------------------------------------------
+all: $(TARGET)
+
+$(TARGET): $(ALLOBJS) src/kobodl.def
+	$(CXX) $(LDFLAGS) -o $@ $(ALLOBJS) $(LIBS) src/kobodl.def
+
+%.obj: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+%.obj: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+clean:
+	-del /Q src\*.obj src\*.d 2>nul
+	-del /Q src\graphics\*.obj src\graphics\*.d 2>nul
+	-del /Q src\sound\*.obj src\sound\*.d 2>nul
+	-del /Q src\eel\*.obj src\eel\*.d 2>nul
+	-del /Q $(TARGET) 2>nul
+
+.PHONY: all clean
+
+DEPFILES = $(ALLOBJS:.obj=.d)
+-include $(DEPFILES)

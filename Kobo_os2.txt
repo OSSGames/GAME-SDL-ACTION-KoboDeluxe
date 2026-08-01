@@ -1,0 +1,184 @@
+KoboDeluxe v0.5.1 - ArcaOS / OS/2 Port
+=======================================
+
+
+DESCRIPTION
+-----------
+Kobo Deluxe is a 3rd-person scrolling 2D shooter based on the classic XKobo
+by Akira Higuchi.  Destroy the labyrinth-shaped enemy bases across 50 levels
+of increasing difficulty while dodging and shooting waves of enemy ships.
+
+This is the ArcaOS / OS/2 port, built with GCC 9.2 (kLIBC) and SDL2.
+
+
+PORT STATUS
+-----------
+  Windowed mode   : Working  (640x480)
+  Fullscreen mode : Not supported
+  Sound           : Working  (requires SDL2_mixer)
+  Keyboard        : Working
+  Joystick        : Untested
+
+
+REQUIREMENTS
+------------
+ArcaOS 5.x, or OS/2 Warp 4.x with the kLIBC runtime.
+
+The following DLLs must be on the LIBPATH or in the game directory:
+
+  SDL2200.DLL     SDL2 base library
+  SDL2I200.DLL    SDL2_image  (PNG loading)
+  SDL2M200.DLL    SDL2_mixer  (sound and music)
+
+Install via the ArcaOS package manager:
+
+  yum install SDL2 SDL2_image SDL2_mixer
+
+
+INSTALLATION
+------------
+1. Extract the archive to any directory, e.g.:
+
+     C:\Games\KoboDeluxe\
+
+2. Confirm the directory contains:
+
+     kobodl.exe
+     data\gfx\    (all .png files - required for graphics)
+     data\sfx\    (all .agw files - required for sound)
+
+3. Ensure the SDL2 DLLs listed above are on the LIBPATH.
+
+   If they are not installed system-wide, copy them into the game directory.
+
+
+RUNNING
+-------
+The game must be started from its own directory so it can locate data\.
+Use a CMD script or change directory first:
+
+     cd C:\Games\KoboDeluxe
+     kobodl.exe
+
+To launch from the Workplace Shell, create a program object and set the
+working directory to the game folder.
+
+
+CONFIGURATION
+-------------
+Settings are saved automatically to kobodl.cfg in the game directory on
+the first run.  Edit the file directly or use the in-game Options menu.
+
+High scores are stored in KoboPlayer in the game directory.
+
+To reset to default settings, delete kobodl.cfg and restart the game.
+
+
+CONTROLS
+--------
+  Arrow keys            Move ship
+  Shift / Ctrl          Fire
+  Numpad 2/4/6/8        Move (alternate)
+  Numpad 1/3/7/9        Diagonal movement (single key)
+  Escape                Menu / Pause
+
+
+KNOWN LIMITATIONS
+-----------------
+- Fullscreen mode is not available in this port.
+- Window size is fixed at 640x480.
+
+
+BUILDING FROM SOURCE
+--------------------
+Requirements:
+  GCC 9.2 with kLIBC      (from ArcaOS RPM repository)
+  SDL2 dev packages        SDL2-devel, SDL2_image-devel, SDL2_mixer-devel
+  GNU make
+
+Build steps (run on ArcaOS from the source root):
+
+  set EMXOMFLD_TYPE=WLINK
+  set EMXOMFLD_LINKER=wl.exe
+  set EMXOMFLD_PRELINK=0
+  make -f Makefile.os2
+
+Or use the provided build script:
+
+  compile-kobodl.cmd
+
+Source code layout:
+
+  src\            Top-level game logic
+  src\graphics\   Graphics engine (SDL2 window, surfaces, sprites)
+  src\sound\      Sound engine (AGW synthesis, MIDI)
+  src\eel\        Embedded scripting engine
+  data\gfx\       PNG graphics assets (runtime, not compiled)
+  data\sfx\       AGW sound assets    (runtime, not compiled)
+
+
+DISTRIBUTION FILE LIST
+----------------------
+Minimum set of files required to run the game:
+
+  kobodl.exe
+  data\gfx\bigfont3.png
+  data\gfx\bigship.png
+  data\gfx\bmr-green.png
+  data\gfx\bmr-pink.png
+  data\gfx\bmr-purple.png
+  data\gfx\bolt.png
+  data\gfx\boltexpl.png
+  data\gfx\bomb.png
+  data\gfx\bombdeto.png
+  data\gfx\brushes.png
+  data\gfx\bullet5b.png
+  data\gfx\bulletexpl2.png
+  data\gfx\counterfont.png
+  data\gfx\crosshair.png
+  data\gfx\deluxe.png
+  data\gfx\explo1e.png
+  data\gfx\explo3e.png
+  data\gfx\explo4e.png
+  data\gfx\explo5e.png
+  data\gfx\fighter.png
+  data\gfx\flatstars1.png
+  data\gfx\focusfx.png
+  data\gfx\goldfont.png
+  data\gfx\hitnoise.png
+  data\gfx\icefont2.png
+  data\gfx\loading3.png
+  data\gfx\logo-outline.png
+  data\gfx\logomask3.png
+  data\gfx\missile.png
+  data\gfx\missile2.png
+  data\gfx\missile3.png
+  data\gfx\noise.png
+  data\gfx\player.png
+  data\gfx\ring.png
+  data\gfx\ringexpl2b.png
+  data\gfx\rock1c.png
+  data\gfx\rock2.png
+  data\gfx\rockexpl.png
+  data\gfx\screen2.png
+  data\gfx\shinyrock.png
+  data\gfx\tiles-blood.png
+  data\gfx\tiles-chrome.png
+  data\gfx\tiles-double.png
+  data\gfx\tiles-green.png
+  data\gfx\tiles-metal.png
+  data\sfx\*.agw     (all AGW files for sound)
+
+
+LICENSE
+-------
+GNU General Public License.  See COPYING for the full license text.
+
+  Copyright (c) 1995-1996  Akira Higuchi
+  Copyright (C) 1997       Masanao Izumo
+  Copyright (C) 1999-2007  David Olofson
+
+
+LINKS
+-----
+https://github.com/OS2World/GAME-SDL-ACTION-Kobo_Deluxe
