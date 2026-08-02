@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KoboDeluxe
+GenericName=Arcade Game
+Comment=An excellent 2D Shootem-up game.
+Exec=kobodl
+Icon=kobodl
+MiniIcon=kobodl
+Type=Application
+Terminal=0
+X-KDE-StartupNotify=true
+X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Game;ArcadeGame
