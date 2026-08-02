@@ -21,16 +21,16 @@ WARNFLAGS = -Wall \
             -Wno-array-bounds \
             -Wno-sequence-point
 
-CFLAGS   = -Zomf -Zmt -O2 -MMD -MP $(WARNFLAGS) \
+CFLAGS   = -O2 -MMD -MP $(WARNFLAGS) \
            -Isrc -Isrc/graphics -Isrc/sound -Isrc/eel -Idata/sfx \
-           -IC:/usr/include -IC:/usr/include/SDL2 \
+           -I/@unixroot/usr/include -I/@unixroot/usr/include/SDL2 \
            $(DEFINES)
 CXXFLAGS = $(CFLAGS) -Wno-literal-suffix
 
-LDFLAGS  = -Zomf -Zmt -Zstack 512
-LIBS     = C:/usr/lib/SDL2_dll.a \
-           C:/usr/lib/SDL2_image_dll.a \
-           C:/usr/lib/SDL2_mixer_dll.a
+LDFLAGS  = -Zomf -Zhigh-mem -Zmap
+LIBS     = /@unixroot/usr/lib/SDL2_dll.a \
+           /@unixroot/usr/lib/SDL2_image_dll.a \
+           /@unixroot/usr/lib/SDL2_mixer_dll.a
 
 TARGET   = kobodl.exe
 
@@ -99,11 +99,11 @@ $(TARGET): $(ALLOBJS) src/kobodl.def
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	-del /Q src\*.obj src\*.d 2>nul
-	-del /Q src\graphics\*.obj src\graphics\*.d 2>nul
-	-del /Q src\sound\*.obj src\sound\*.d 2>nul
-	-del /Q src\eel\*.obj src\eel\*.d 2>nul
-	-del /Q $(TARGET) 2>nul
+	-rm -f src/*.obj src/*.d
+	-rm -f src/graphics/*.obj src/graphics/*.d
+	-rm -f src/sound/*.obj src/sound/*.d
+	-rm -f src/eel/*.obj src/eel/*.d
+	-rm -f $(TARGET) kobodl.map
 
 .PHONY: all clean
 
