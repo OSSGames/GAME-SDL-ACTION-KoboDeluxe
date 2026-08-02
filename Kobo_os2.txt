@@ -181,4 +181,5 @@ GNU General Public License.  See COPYING for the full license text.
 
 LINKS
 -----
-https://github.com/OS2World/GAME-SDL-ACTION-Kobo_Deluxe
+* https://github.com/OS2World/GAME-SDL-ACTION-Kobo_Deluxe
+* https://olofson.net/kobodl/

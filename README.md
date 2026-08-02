@@ -84,4 +84,5 @@ Copyright (C) 1997 Masanao Izumo
 Copyright (C) 1999–2007 David Olofson
 
 ## Links
-- https://github.com/OS2World/GAME-SDL-ACTION-Kobo_Deluxe
+* https://github.com/OS2World/GAME-SDL-ACTION-Kobo_Deluxe
+* https://olofson.net/kobodl/

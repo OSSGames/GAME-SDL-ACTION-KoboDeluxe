@@ -1,5 +1,6 @@
 CC      = gcc
 CXX     = g++
+RC      = wrc
 
 DEFINES = -DHAVE_SNPRINTF -DHAVE_VSNPRINTF -DHAVE_ATEXIT \
           -DHAVE_LIBSDL_IMAGE -DVERSION=\"0.5.1\" -DPACKAGE=\"KoboDeluxe\" \
@@ -89,8 +90,12 @@ ALLOBJS = $(KOBOOBJS) $(GRFXOBJS) $(SNDOBJS) $(EELOBJS)
 # ---------------------------------------------------------------
 all: $(TARGET)
 
-$(TARGET): $(ALLOBJS) src/kobodl.def
+kobodl.res: src/kobodl.rc kobodl.ico
+	$(RC) -r -fo=$@ src/kobodl.rc
+
+$(TARGET): $(ALLOBJS) src/kobodl.def kobodl.res
 	$(CXX) $(LDFLAGS) -o $@ $(ALLOBJS) $(LIBS) src/kobodl.def
+	$(RC) kobodl.res $@
 
 %.obj: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
@@ -103,7 +108,7 @@ clean:
 	-rm -f src/graphics/*.obj src/graphics/*.d
 	-rm -f src/sound/*.obj src/sound/*.d
 	-rm -f src/eel/*.obj src/eel/*.d
-	-rm -f $(TARGET) kobodl.map
+	-rm -f $(TARGET) kobodl.map kobodl.res
 
 .PHONY: all clean
 
